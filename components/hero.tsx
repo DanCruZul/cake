@@ -5,7 +5,7 @@ import { Sparkles } from "@/components/ui/sparkles";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { useRef, memo } from "react";
 import { cn } from "@/lib/utils";
-import { Flower2 } from "lucide-react";
+import { Cake, Cookie, Croissant, IceCream } from "lucide-react";
 import { Dancing_Script } from "next/font/google";
 import Image from "next/image";
 
@@ -40,23 +40,65 @@ const ImageComponent = memo(
     alt?: string;
     index: number;
     className?: string;
-  }) => (
-    <Image
-      src={src}
-      fill
-      className={cn("object-cover", className)}
-      alt={alt || ""}
-      sizes="(max-width: 768px) 30vw, 22vw"
-      priority={index <= 1}
-      quality={65}
-      loading={index <= 1 ? "eager" : "lazy"}
-      placeholder="blur"
-      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVigAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx4eHRoaHSQtJSAyUC8zLy4vMzA2PEA4Njs/NzpAQD9KSUA9Q0RBQUFBQUFBQUFBQUH/2wBDAR"
-    />
-  )
+  }) => {
+    const basePath = src;
+    const imageWidth = index <= 1 ? 600 : 400;
+
+    return (
+      <picture>
+        <source
+          type="image/avif"
+          srcSet={`${basePath}-300.avif 300w, ${basePath}-400.avif 400w, ${basePath}-600.avif 600w, ${basePath}-750.avif 750w`}
+          sizes="(max-width: 640px) 300px, (max-width: 1024px) 400px, 600px"
+        />
+        <source
+          type="image/webp"
+          srcSet={`${basePath}-300.webp 300w, ${basePath}-400.webp 400w, ${basePath}-600.webp 600w, ${basePath}-750.webp 750w`}
+          sizes="(max-width: 640px) 300px, (max-width: 1024px) 400px, 600px"
+        />
+        <Image
+          src={`${basePath}-${imageWidth}.webp`}
+          fill
+          className={cn("object-cover", className)}
+          alt={alt || ""}
+          sizes="(max-width: 640px) 300px, (max-width: 1024px) 400px, 600px"
+          priority={index <= 1}
+          quality={80}
+          loading={index <= 1 ? "eager" : "lazy"}
+          placeholder="blur"
+          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVigAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx4eHRoaHSQtJSAyUC8zLy4vMzA2PEA4Njs/NzpAQD9KSUA9Q0RBQUFBQUFBQUFBQUH/2wBDAR"
+        />
+      </picture>
+    );
+  }
 );
 
 ImageComponent.displayName = "ImageComponent";
+
+const DecorativeIcon = ({
+  Icon,
+  className,
+  rotate = 0,
+}: {
+  Icon: typeof Cake;
+  className?: string;
+  rotate?: number;
+}) => (
+  <motion.div
+    initial={{ opacity: 0, scale: 0.8 }}
+    animate={{ opacity: 1, scale: 1 }}
+    transition={{ duration: 0.3 }}
+    className={cn(
+      "absolute w-10 h-10 md:w-14 md:h-14 bg-[#FFE4B5] rounded-xl p-2 md:p-2.5 shadow-lg z-10",
+      className
+    )}
+  >
+    <Icon
+      className="w-full h-full text-[#4a1e1b]"
+      style={{ transform: `rotate(${rotate}deg)` }}
+    />
+  </motion.div>
+);
 
 export const Hero = memo((props: HeroProps) => {
   const { heading, description, buttons, images, className, ...rest } = {
@@ -158,35 +200,49 @@ export const Hero = memo((props: HeroProps) => {
             ))}
           </div>
         </motion.div>
-        <div className="relative flex h-full items-center justify-center pb-24 pt-16 md:pt-0 lg:pb-0 z-20 px-[5%]">
+        <div className="relative flex h-full items-center justify-center pb-24 pt-16 md:pt-0 lg:pb-0 z-20 px-[5%] md:-mt-20">
           <div className="mx-auto max-w-lg text-center">
-            <div className="relative mb-12 inline-block">
-              <div className="absolute -left-8 -top-8">
-                <Flower2 className="h-14 w-14 rotate-45 text-white/80 drop-shadow-lg transition-transform hover:scale-110" />
-              </div>
-              <div className="absolute -right-8 -top-8">
-                <Flower2 className="h-14 w-14 -rotate-45 text-white/80 drop-shadow-lg transition-transform hover:scale-110" />
-              </div>
+            <div className="relative mb-4 md:mb-6 inline-block">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
+                className="relative"
+              >
+                <div className="relative h-40 w-40 md:h-48 md:w-48 lg:h-56 lg:w-56 rounded-full overflow-hidden border-3 border-[#4a1e1b] bg-white shadow-2xl transition-transform duration-300 hover:scale-105">
+                  <ImageComponent
+                    src="/images/chef.webp"
+                    alt="Nuestra chef pastelera"
+                    index={0}
+                    className="!object-cover"
+                  />
+                </div>
 
-              <div className="relative h-40 w-40 md:h-48 md:w-48 lg:h-56 lg:w-56 rounded-full overflow-hidden border-4 border-white/90 shadow-2xl transition-transform hover:scale-105 duration-300">
-                <ImageComponent
-                  src="/images/chef.webp"
-                  alt="Nuestra chef pastelera"
-                  index={0}
-                  className="!object-cover"
+                <DecorativeIcon
+                  Icon={Cake}
+                  className="-top-2 md:-top-3 right-4 md:right-6 transform rotate-12"
+                  rotate={15}
                 />
-              </div>
-
-              <div className="absolute -bottom-8 -left-8">
-                <Flower2 className="h-14 w-14 -rotate-[135deg] text-white/80 drop-shadow-lg transition-transform hover:scale-110" />
-              </div>
-              <div className="absolute -bottom-8 -right-8">
-                <Flower2 className="h-14 w-14 rotate-[135deg] text-white/80 drop-shadow-lg transition-transform hover:scale-110" />
-              </div>
+                <DecorativeIcon
+                  Icon={Cookie}
+                  className="top-1/3 -left-2 md:-left-3 transform -rotate-12"
+                  rotate={-20}
+                />
+                <DecorativeIcon
+                  Icon={Croissant}
+                  className="bottom-1/3 -right-2 md:-right-3 transform rotate-45"
+                  rotate={45}
+                />
+                <DecorativeIcon
+                  Icon={IceCream}
+                  className="-bottom-2 md:-bottom-3 left-4 md:left-6 transform -rotate-12"
+                  rotate={-12}
+                />
+              </motion.div>
             </div>
             <Sparkles>
               <h1
-                className={`mb-5 text-6xl font-bold text-white md:mb-6 md:text-9xl lg:text-10xl drop-shadow-[0_4px_4px_rgba(0,0,0,0.3)] ${dancingScript.className}`}
+                className={`mb-5 text-7xl font-bold text-white md:mb-6 md:text-9xl lg:text-[16rem] xl:text-[18rem] drop-shadow-[0_4px_4px_rgba(74,30,27,0.3)] text-shadow-lg [text-shadow:_4px_4px_15px_rgb(74_30_27_/_40%)] ${dancingScript.className}`}
               >
                 {heading}
               </h1>
@@ -219,27 +275,27 @@ export const heroDefaults: Props = {
   ],
   images: [
     {
-      src: "/images/pastel-frutos-rojos.webp",
+      src: "/images/pastel-frutos-rojos",
       alt: "Pastel con frutos rojos",
     },
     {
-      src: "/images/macarons.webp",
+      src: "/images/macarons",
       alt: "Macarons coloridos",
     },
     {
-      src: "/images/croissants.webp",
+      src: "/images/croissants",
       alt: "Croissants recién horneados",
     },
     {
-      src: "/images/pastel-cumpleanos.webp",
+      src: "/images/pastel-cumpleanos",
       alt: "Pastel de cumpleaños con flores",
     },
     {
-      src: "/images/cupcakes.webp",
+      src: "/images/cupcakes",
       alt: "Exhibición de cupcakes",
     },
     {
-      src: "/images/pasteles.webp",
+      src: "/images/pasteles",
       alt: "Selección de pasteles",
     },
   ],

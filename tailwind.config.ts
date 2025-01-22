@@ -46,6 +46,9 @@ const config: Config = {
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
       },
+      borderWidth: {
+        '3': '3px',
+      },
       keyframes: {
         'accordion-down': {
           from: { height: '0' },
