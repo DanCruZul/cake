@@ -2,10 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Estilos críticos */
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --pastel-cream: #fff5e6;
+  --pastel-pink: #ffe4e1;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -78,5 +81,44 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Optimizar el rendimiento de las animaciones */
+@layer utilities {
+  .will-change-transform {
+    will-change: transform;
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+
+  .transform-gpu {
+    transform: translateZ(0);
+  }
+}
+
+/* Optimizar el rendimiento de las fuentes */
+@font-face {
+  font-family: "Dancing Script";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/_next/static/media/dancing-script.woff2") format("woff2");
+}
+
+/* Reducir el CSS no utilizado */
+@layer components {
+  .hero-gradient {
+    @apply bg-gradient-to-b from-pastel-cream to-pastel-pink;
+  }
+
+  .hero-text {
+    @apply text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.3)];
+  }
+
+  .hero-image {
+    @apply object-cover rounded-2xl overflow-hidden shadow-xl;
   }
 }
